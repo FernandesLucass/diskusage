@@ -2,6 +2,7 @@
   "uuid": "diskusage@lucas.com",
   "name": "Disk Usage",
   "description": "Exibe o uso e o espaço livre dos discos conectados.",
+  "url": "https://github.com/FernandesLucass/diskusage",
   "shell-version": [
     "45",
     "46",
