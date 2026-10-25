@@ -4,7 +4,8 @@ import { createDiskMenu } from './diskMenu.js';
 
 export default class DiskUsageExtension extends Extension {
     enable() {
-        this._indicator = createDiskMenu();
+        const settings = this.getSettings('org.gnome.shell.extensions.diskusage');
+        this._indicator = createDiskMenu(settings);
         Main.panel.addToStatusArea(this.uuid, this._indicator);
     }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.diskusage" path="/org/gnome/shell/extensions/diskusage/">
+    <key name="disk-order" type="as">
+      <default>[]</default>
+      <summary>Ordem dos discos</summary>
+      <description>Lista com os pontos de montagem dos discos na ordem definida pelo usuário.</description>
+    </key>
+  </schema>
+</schemalist>

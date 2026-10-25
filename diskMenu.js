@@ -4,7 +4,7 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import { getDiskUsage } from './diskUsage.js';
 
-export function createDiskMenu() {
+export function createDiskMenu(settings) {
     const button = new PanelMenu.Button(0.0, 'Disk Usage');
     const icon = new St.Icon({
         icon_name: 'drive-harddisk-symbolic',
@@ -16,7 +16,19 @@ export function createDiskMenu() {
     function refreshDisks() {
         try {
             button.menu.removeAll();
-            const disks = getDiskUsage();
+            let disks = getDiskUsage();
+
+            const savedOrder = settings.get_strv('disk-order');
+
+            disks.sort((a, b) => {
+                let indexA = savedOrder.indexOf(a.mountpoint);
+                let indexB = savedOrder.indexOf(b.mountpoint);
+                
+                if (indexA === -1) indexA = 999;
+                if (indexB === -1) indexB = 999;
+                
+                return indexA - indexB;
+            });
 
             if (disks.length === 0) {
                 button.menu.addMenuItem(new PopupMenu.PopupMenuItem('Nenhum disco encontrado'));
@@ -70,10 +82,8 @@ export function createDiskMenu() {
         }
     }
 
-    // Carrega os discos logo na inicialização para evitar que o menu fique vazio
     refreshDisks();
 
-    // Atualiza os discos sempre que o menu for aberto usando o sinal correto
     button.menu.connect('open-state-changed', (menu, isOpen) => {
         if (isOpen) refreshDisks();
     });
