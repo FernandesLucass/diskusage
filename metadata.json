@@ -1,0 +1,12 @@
+{
+  "uuid": "diskusage@lucas.com",
+  "name": "Disk Usage",
+  "description": "Exibe o uso e o espaço livre dos discos conectados.",
+  "shell-version": [
+    "45",
+    "46",
+    "47",
+    "50"
+  ],
+  "version": 1
+}
