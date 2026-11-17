@@ -4,7 +4,13 @@
     <key name="disk-order" type="as">
       <default>[]</default>
       <summary>Ordem dos discos</summary>
-      <description>Lista com os pontos de montagem dos discos na ordem definida pelo usuário.</description>
+      <description>Lista com os pontos de montagem na ordem definida pelo usuário.</description>
+    </key>
+    <!-- Nova chave de idioma -->
+    <key name="language" type="s">
+      <default>'auto'</default>
+      <summary>Idioma</summary>
+      <description>Opções: auto, pt, en</description>
     </key>
   </schema>
 </schemalist>

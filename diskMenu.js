@@ -1,8 +1,8 @@
 import St from 'gi://St';
-import Clutter from 'gi://Clutter';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import { getDiskUsage } from './diskUsage.js';
+import { getTranslation } from './translations.js';
 
 export function createDiskMenu(settings) {
     const button = new PanelMenu.Button(0.0, 'Disk Usage');
@@ -13,25 +13,28 @@ export function createDiskMenu(settings) {
 
     button.add_child(icon);
 
-    function refreshDisks() {
+    async function refreshDisks() {
         try {
             button.menu.removeAll();
-            let disks = getDiskUsage();
+            
+            // Puxa as traduções do idioma atual
+            const t = getTranslation(settings);
+            
+            // Aguarda os discos em segundo plano
+            let disks = await getDiskUsage();
 
             const savedOrder = settings.get_strv('disk-order');
 
             disks.sort((a, b) => {
                 let indexA = savedOrder.indexOf(a.mountpoint);
                 let indexB = savedOrder.indexOf(b.mountpoint);
-                
                 if (indexA === -1) indexA = 999;
                 if (indexB === -1) indexB = 999;
-                
                 return indexA - indexB;
             });
 
             if (disks.length === 0) {
-                button.menu.addMenuItem(new PopupMenu.PopupMenuItem('Nenhum disco encontrado'));
+                button.menu.addMenuItem(new PopupMenu.PopupMenuItem(t.noDisks));
                 return;
             }
 
@@ -52,7 +55,7 @@ export function createDiskMenu(settings) {
                 });
 
                 const details = new St.Label({
-                    text: `${disk.percentage}% usado · ${(disk.available / 1e9).toFixed(1)} GB livres`,
+                    text: `${disk.percentage}% ${t.used} · ${disk.availableStr} ${t.freeOf} ${disk.totalStr}`,
                     style: 'font-size: 0.9em; padding-top: 4px; padding-bottom: 6px;',
                 });
 
@@ -78,7 +81,6 @@ export function createDiskMenu(settings) {
             }
         } catch (error) {
             console.error(`Disk Usage Error: ${error}`);
-            button.menu.addMenuItem(new PopupMenu.PopupMenuItem('Erro ao carregar discos'));
         }
     }
 
